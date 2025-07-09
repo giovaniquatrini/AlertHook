@@ -1,4 +1,3 @@
-
 package com.example.alerthook
 
 import android.service.notification.NotificationListenerService
@@ -50,12 +49,18 @@ class NotificationListener : NotificationListenerService() {
                             packageName
                         }
 
+                        val includePackageName = settingsManager.includePackageName.first()
+                        val includeAppName = settingsManager.includeAppName.first()
+                        val includeTitle = settingsManager.includeTitle.first()
+                        val includeText = settingsManager.includeText.first()
+                        val includeTimestamp = settingsManager.includeTimestamp.first()
+
                         val notificationPayload = NotificationPayload(
-                            packageName = packageName,
-                            appName = appName,
-                            title = title,
-                            text = text,
-                            timestamp = postTime
+                            packageName = if (includePackageName) packageName else null,
+                            appName = if (includeAppName) appName else null,
+                            title = if (includeTitle) title else null,
+                            text = if (includeText) text else null,
+                            timestamp = if (includeTimestamp) postTime else 0L // 0L if not included
                         )
 
                         val success = webhookService.sendNotification(webhookUrl, notificationPayload)

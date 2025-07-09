@@ -1,4 +1,3 @@
-
 package com.example.alerthook
 
 import android.os.Bundle
@@ -18,8 +17,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             AlertHookTheme {
-                AppNavigation()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    Text("Hello World from AlertHook!")
+                }
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DefaultPreview() {
+    AlertHookTheme {
+        Text("Hello World from AlertHook!")
     }
 }

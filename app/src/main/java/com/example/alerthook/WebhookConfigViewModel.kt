@@ -1,4 +1,3 @@
-
 package com.example.alerthook
 
 import android.app.Application
@@ -21,9 +20,30 @@ class WebhookConfigViewModel(application: Application) : AndroidViewModel(applic
     private val settingsManager = SettingsManager(application.applicationContext)
     private val webhookService = WebhookService()
 
+    // Payload customization states
+    private val _includePackageName = MutableStateFlow(true)
+    val includePackageName: StateFlow<Boolean> = _includePackageName
+
+    private val _includeAppName = MutableStateFlow(true)
+    val includeAppName: StateFlow<Boolean> = _includeAppName
+
+    private val _includeTitle = MutableStateFlow(true)
+    val includeTitle: StateFlow<Boolean> = _includeTitle
+
+    private val _includeText = MutableStateFlow(true)
+    val includeText: StateFlow<Boolean> = _includeText
+
+    private val _includeTimestamp = MutableStateFlow(true)
+    val includeTimestamp: StateFlow<Boolean> = _includeTimestamp
+
     init {
         viewModelScope.launch {
             _webhookUrl.value = settingsManager.webhookUrl.first()
+            _includePackageName.value = settingsManager.includePackageName.first()
+            _includeAppName.value = settingsManager.includeAppName.first()
+            _includeTitle.value = settingsManager.includeTitle.first()
+            _includeText.value = settingsManager.includeText.first()
+            _includeTimestamp.value = settingsManager.includeTimestamp.first()
         }
     }
 
@@ -63,5 +83,30 @@ class WebhookConfigViewModel(application: Application) : AndroidViewModel(applic
                 _saveStatus.value = "Por favor, insira uma URL válida antes de testar."
             }
         }
+    }
+
+    fun toggleIncludePackageName(checked: Boolean) {
+        viewModelScope.launch { settingsManager.setIncludePackageName(checked) }
+        _includePackageName.value = checked
+    }
+
+    fun toggleIncludeAppName(checked: Boolean) {
+        viewModelScope.launch { settingsManager.setIncludeAppName(checked) }
+        _includeAppName.value = checked
+    }
+
+    fun toggleIncludeTitle(checked: Boolean) {
+        viewModelScope.launch { settingsManager.setIncludeTitle(checked) }
+        _includeTitle.value = checked
+    }
+
+    fun toggleIncludeText(checked: Boolean) {
+        viewModelScope.launch { settingsManager.setIncludeText(checked) }
+        _includeText.value = checked
+    }
+
+    fun toggleIncludeTimestamp(checked: Boolean) {
+        viewModelScope.launch { settingsManager.setIncludeTimestamp(checked) }
+        _includeTimestamp.value = checked
     }
 }
